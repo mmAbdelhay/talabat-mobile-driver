@@ -1,0 +1,12 @@
+{
+  "name": "talabat-mobile-driver",
+  "displayName": "talabat-mobile-driver",
+  "expo": {
+    "name": "talabat-mobile-driver",
+    "slug": "talabat-mobile-driver",
+    "version": "1.0.0",
+    "assetBundlePatterns": [
+      "**/*"
+    ]
+  }
+}
