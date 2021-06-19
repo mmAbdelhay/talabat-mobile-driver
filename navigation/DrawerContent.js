@@ -45,15 +45,6 @@ export default function DrawerContent(props) {
                   <Text style={{ color: "#777777" }}>
                     Mobile : {props?.driver?.mobile}
                   </Text>
-                  <Text style={{ color: "#777777" }}>
-                    Date of birth : {props?.driver?.date_of_birth}
-                  </Text>
-                  <Text style={{ color: "#777777" }}>
-                    Country : {props?.driver?.country}
-                  </Text>
-                  <Text style={{ color: "#777777" }}>
-                    Gender : {props?.driver?.gender}
-                  </Text>
                 </View>
               </View>
             </View>

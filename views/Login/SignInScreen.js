@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -12,10 +12,12 @@ import {
 import * as Animatable from "react-native-animatable";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import Feather from "react-native-vector-icons/Feather";
+import * as Location from "expo-location";
 import { login } from "../../services/AxiosRequests";
 import { Restart } from "fiction-expo-restart";
 
 const SignInScreen = ({ navigation }) => {
+  const [location, setLocation] = useState("");
   const [data, setData] = useState({
     email: "",
     password: "",
@@ -25,11 +27,25 @@ const SignInScreen = ({ navigation }) => {
     isValidPassword: true,
   });
 
+  useEffect(() => {
+    (async () => {
+      let { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== "granted") {
+        setErrorMsg("Permission to access location was denied");
+        return;
+      }
+      let location = await Location.getCurrentPositionAsync({});
+      setLocation(location);
+    })();
+  }, []);
+
   const onlogin = async () => {
     if (data.email.length > 0 || data.password.length > 0) {
       const payload = {
         email: data.email,
         password: data.password,
+        last_latitude: location.coords.latitude,
+        last_longitude: location.coords.longitude,
       };
       if (await login(payload)) {
         Alert.alert("Login successfully", `you will redirect to home page`, [
