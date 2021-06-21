@@ -5,6 +5,7 @@ import Constants from "expo-constants";
 import Loading from "../Loading/Loading";
 import WorkState from "../Shared/workState";
 import { axiosPost, axiosPut } from "../../services/AxiosRequests";
+import Map from "../map/Map";
 
 const HomeScreen = ({ navigation }) => {
   const [location, setLocation] = useState(null);
@@ -45,17 +46,16 @@ const HomeScreen = ({ navigation }) => {
 
   useEffect(() => {
     if (location && isOnCall) {
-      setLoading(false);
       (async () => {
         const payload = {
           latitude: location.coords.latitude,
           longitude: location.coords.longitude,
         };
         let response = await axiosPost("/api/v1/driver/socket/", payload);
-        console.log("HI", response.Order[0].id);
         setOrder(response.Order[0].id);
       })();
     }
+    if (location) setLoading(false);
   }, [location]);
 
   useEffect(() => {
@@ -78,6 +78,7 @@ const HomeScreen = ({ navigation }) => {
       clearInterval(orderInterval);
     }
   }, [location, order]);
+
   if (loading) {
     return (
       <View style={styles.loadingContainer}>
@@ -96,7 +97,9 @@ const HomeScreen = ({ navigation }) => {
         <WorkState workState={(value) => setWorkState(value)} />
         {workState == "OnCall" && (
           //and any login according to OnCall driver
-          <Text>Map goes here {JSON.stringify(location)}</Text>
+          <View>
+            <Map />
+          </View>
         )}
       </View>
     );
