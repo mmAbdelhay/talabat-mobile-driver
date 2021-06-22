@@ -42,11 +42,19 @@ export default function Map({ navigation, route }) {
       latitude == order.delivery_latitude &&
       longitude == order.delivery_longitude
     ) {
-      (async () => {
-        let response = await axiosPut("/api/v1/driver/status/", {
-          work_state: "OnCall",
-        });
-      })();
+      Alert.alert("Confirmation", `did you deliver the order`, [
+        {
+          text: "cancel",
+          onPress: () => console.info("canceled"),
+        },
+        {
+          text: "ok",
+          onPress: async () => {
+            await axiosPut("/api/v1/driver/status/", { work_state: "OnCall" });
+            navigation.navigate("Home");
+          },
+        },
+      ]);
     }
   }, [location]);
 
