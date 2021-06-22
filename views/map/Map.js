@@ -21,18 +21,18 @@ export default function Map(props) {
   };
 
   return (
-    <View
-      style={{
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        height: "80%",
-      }}
-    >
+    
       <MapView style={{ flex: 1 }} initialRegion={region}>
         <Polyline coordinates={[Berlin, Frankfurt]} />
         <Marker coordinate={{ latitude: 51.5078788, longitude: -0.0877321 }} />
       </MapView>
-    </View>
+    
+    // <MapView
+    //   style={{ flex: 1 }}
+    //   initialRegion={region}
+    // >
+    //   <Marker coordinate={{ latitude: 52.5200066, longitude: 13.404954 }} />
+    //   <Polyline coordinates={[Berlin, Frankfurt]} />
+    // </MapView>
   );
 }

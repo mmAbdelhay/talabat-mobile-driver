@@ -79,31 +79,35 @@ const HomeScreen = ({ navigation }) => {
     }
   }, [location, order]);
 
-  if (loading) {
-    return (
-      <View style={styles.loadingContainer}>
-        <Loading />
-      </View>
-    );
-  } else {
-    return (
-      <View
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-      >
-        <WorkState workState={(value) => setWorkState(value)} />
-        {workState == "OnCall" && (
-          //and any login according to OnCall driver
-          <View>
-            <Map />
-          </View>
-        )}
-      </View>
-    );
-  }
+  return(
+    <Map/>
+  )
+
+  // if (loading) {
+  //   return (
+  //     <View style={styles.loadingContainer}>
+  //       <Loading />
+  //     </View>
+  //   );
+  // } else {
+  //   return (
+  //     <View
+  //       style={{
+  //         display: "flex",
+  //         justifyContent: "center",
+  //         alignItems: "center",
+  //       }}
+  //     >
+  //       <WorkState workState={(value) => setWorkState(value)} />
+  //       {workState == "OnCall" && (
+  //         //and any login according to OnCall driver
+  //         <View>
+  //           <Map />
+  //         </View>
+  //       )}
+  //     </View>
+  //   );
+  // }
 };
 
 export default HomeScreen;

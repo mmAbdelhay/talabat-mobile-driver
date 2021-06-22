@@ -16,7 +16,7 @@ export default function WorkState(props) {
         height: 50,
         width: "70%",
         backgroundColor: "#007cff",
-        borderRadius: "25px",
+        
         margin: "auto",
       }}
     >
