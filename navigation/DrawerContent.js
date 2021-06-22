@@ -59,15 +59,6 @@ export default function DrawerContent(props) {
                 props.navigation.navigate("Home");
               }}
             />
-            <DrawerItem
-              icon={({ color, size }) => (
-                <Icon name="account-outline" color={color} size={size} />
-              )}
-              label="Edit account"
-              onPress={() => {
-                props.navigation.navigate("Account");
-              }}
-            />
           </Drawer.Section>
           <Drawer.Section title="Preferences">
             <DrawerItem

@@ -16,7 +16,7 @@ export default function WorkState(props) {
         height: 50,
         width: "70%",
         backgroundColor: "#007cff",
-        
+
         margin: "auto",
       }}
     >
@@ -31,8 +31,9 @@ export default function WorkState(props) {
         <RNPickerSelect
           onValueChange={changeHandler}
           items={[
-            { label: "OnCall", value: "OnCall" },
             { label: "OffCall", value: "OffCall" },
+            { label: "Break", value: "Break" },
+            { label: "OnCall", value: "OnCall" },
           ]}
         />
       </View>
