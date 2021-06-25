@@ -60,6 +60,27 @@ export default function Map({ navigation, route }) {
     }
   }, [latitude, longitude]);
 
+  useEffect(() => {
+    let orderInterval;
+    if (latitude && longitude) {
+      (async () => {
+        orderInterval = setInterval(async () => {
+          const socketPayload = {
+            order_id: order.id,
+            lat: latitude,
+            long: longitude,
+          };
+          let socketResponse = await axiosPost(
+            "/api/v1/driver/socket/updatelocation",
+            socketPayload
+          );
+        }, 5000);
+      })();
+    } else {
+      clearInterval(orderInterval);
+    }
+  }, [latitude, longitude, order]);
+
   const pickupLocation = {
     latitude: +order.pickup_latitude,
     longitude: +order.pickup_longitude,
