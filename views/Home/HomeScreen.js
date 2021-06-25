@@ -38,7 +38,9 @@ const HomeScreen = ({ navigation }) => {
   }, []);
 
   useEffect(() => {
+    console.log("my logayaaasa",location.coords.latitude,location.coords.longitude,isOnCall);
     if (location && isOnCall) {
+      console.log("wtf");
       (async () => {
         const payload = {
           latitude: location.coords.latitude,
@@ -46,6 +48,7 @@ const HomeScreen = ({ navigation }) => {
         };
         let response = await axiosPost("/api/v1/driver/socket/", payload);
         setOrder(response.Order[0]);
+        
       })();
     }
     if (location) setLoading(false);
@@ -91,7 +94,7 @@ const HomeScreen = ({ navigation }) => {
         <WorkState
           workState={(value) => {
             setWorkState(value);
-            if (value == "OnCall" && order) {
+            if (workState == "OnCall" && order) {
               Alert.alert(
                 "start your shift",
                 `you will redirect to Map page to take your next order`,
@@ -133,6 +136,7 @@ const HomeScreen = ({ navigation }) => {
       </View>
     );
   }
+
 };
 
 export default HomeScreen;

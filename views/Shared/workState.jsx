@@ -20,23 +20,17 @@ export default function WorkState(props) {
         margin: "auto",
       }}
     >
-      <Text>Select your workState :</Text>
-      <View
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-      >
-        <RNPickerSelect
-          onValueChange={changeHandler}
-          items={[
-            { label: "OffCall", value: "OffCall" },
-            { label: "Break", value: "Break" },
-            { label: "OnCall", value: "OnCall" },
-          ]}
-        />
-      </View>
+    <Text>Select your workState :</Text>
+
+    <RNPickerSelect
+        onValueChange={changeHandler}
+        items={[
+          { label: "OffCall", value: "OffCall" },
+          { label: "Break", value: "Break" },
+          { label: "OnCall", value: "OnCall" },
+        ]}
+    />
+
     </View>
   );
 }
