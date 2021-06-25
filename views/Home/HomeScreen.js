@@ -14,16 +14,31 @@ const HomeScreen = ({ navigation }) => {
   const [workState, setWorkState] = useState("");
   const [isOnCall, setIsOnCall] = useState(false);
 
-  useEffect(() => {
-    if (workState) {
-      (async () => {
-        let response = await axiosPut("/api/v1/driver/status/", {
-          work_state: workState,
-        });
-        if (response.Message === "OnCall") setIsOnCall(true);
-      })();
+  const getLocation = async () => {
+    let { status } = await Location.requestForegroundPermissionsAsync();
+    if (status !== "granted") {
+      setErrorMsg("Permission to access location was denied");
+      return;
     }
-  }, [workState]);
+    let location = await Location.getCurrentPositionAsync({});
+    setLocation(location);
+  };
+
+  const setWorkStateToServer = async (workState) => {
+    let response = await axiosPut("/api/v1/driver/status/", {
+      work_state: workState,
+    });
+    if (response.Message === "OnCall") setIsOnCall(true);
+  };
+
+  const getOrder = async (locationformPhone) => {
+    const payload = {
+      latitude: locationformPhone.coords.latitude,
+      longitude: locationformPhone.coords.longitude,
+    };
+    let response = await axiosPost("/api/v1/driver/socket/", payload);
+    setOrder(response.Order[0]);
+  };
 
   useEffect(() => {
     (async () => {
@@ -32,48 +47,88 @@ const HomeScreen = ({ navigation }) => {
         setErrorMsg("Permission to access location was denied");
         return;
       }
-      let location = await Location.getCurrentPositionAsync({});
-      setLocation(location);
+      let locationformPhone = await Location.getCurrentPositionAsync({});
+      setLocation(locationformPhone);
     })();
   }, []);
 
   useEffect(() => {
-    console.log("my logayaaasa",location.coords.latitude,location.coords.longitude,isOnCall);
-    if (location && isOnCall) {
-      console.log("wtf");
-      (async () => {
-        const payload = {
-          latitude: location.coords.latitude,
-          longitude: location.coords.longitude,
-        };
-        let response = await axiosPost("/api/v1/driver/socket/", payload);
-        setOrder(response.Order[0]);
-        
-      })();
+    if (location) {
+      if (location?.coords?.latitude && location?.coords?.longitude) {
+        getOrder(location);
+        setLoading(false);
+      }
     }
-    if (location) setLoading(false);
   }, [location]);
 
   useEffect(() => {
-    let orderInterval;
-    if (location && order && isOnCall) {
-      (async () => {
-        orderInterval = setInterval(async () => {
-          const socketPayload = {
-            order_id: order,
-            lat: location.coords.latitude,
-            long: location.coords.longitude,
-          };
-          let socketResponse = await axiosPost(
-            "/api/v1/driver/socket/updatelocation",
-            socketPayload
-          );
-        }, 5000);
-      })();
-    } else {
-      clearInterval(orderInterval);
-    }
-  }, [location, order]);
+    if (workState) setWorkStateToServer(workState);
+  }, [workState]);
+
+  // useEffect(() => {
+
+  //   let orderInterval;
+  //   if (location && order && isOnCall) {
+  //     (async () => {
+  //       orderInterval = setInterval(async () => {
+  //         const socketPayload = {
+  //           order_id: order,
+  //           lat: location.coords.latitude,
+  //           long: location.coords.longitude,
+  //         };
+  //         let socketResponse = await axiosPost(
+  //           "/api/v1/driver/socket/updatelocation",
+  //           socketPayload
+  //         );
+  //       }, 5000);
+  //     })();
+  //   } else {
+  //     clearInterval(orderInterval);
+  //   }
+  // }, [location, order, workState]);
+
+  // useEffect(() => {
+  //   // console.log(
+  //   //   "my logayaaasa",
+  //   //   location.coords.latitude,
+  //   //   location.coords.longitude,
+  //   //   isOnCall,
+  //   //   order
+  //   // );
+  //   if (location && isOnCall) {
+  //     console.log("wtf");
+  //     (async () => {
+  //       const payload = {
+  //         latitude: location.coords.latitude,
+  //         longitude: location.coords.longitude,
+  //       };
+  //       let response = await axiosPost("/api/v1/driver/socket/", payload);
+  //       setOrder(response.Order[0]);
+  //     })();
+  //   }
+  //   if (location) setLoading(false);
+  // }, [location]);
+
+  // useEffect(() => {
+  //   let orderInterval;
+  //   if (location && order && isOnCall) {
+  //     (async () => {
+  //       orderInterval = setInterval(async () => {
+  //         const socketPayload = {
+  //           order_id: order,
+  //           lat: location.coords.latitude,
+  //           long: location.coords.longitude,
+  //         };
+  //         let socketResponse = await axiosPost(
+  //           "/api/v1/driver/socket/updatelocation",
+  //           socketPayload
+  //         );
+  //       }, 5000);
+  //     })();
+  //   } else {
+  //     clearInterval(orderInterval);
+  //   }
+  // }, [location, order]);
 
   if (loading) {
     return (
@@ -94,7 +149,7 @@ const HomeScreen = ({ navigation }) => {
         <WorkState
           workState={(value) => {
             setWorkState(value);
-            if (workState == "OnCall" && order) {
+            if (value == "OnCall" && order) {
               Alert.alert(
                 "start your shift",
                 `you will redirect to Map page to take your next order`,
@@ -136,7 +191,6 @@ const HomeScreen = ({ navigation }) => {
       </View>
     );
   }
-
 };
 
 export default HomeScreen;
