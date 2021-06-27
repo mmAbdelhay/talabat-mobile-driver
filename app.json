@@ -1,15 +1,19 @@
 {
-  "name": "talabat-mobile-driver",
-  "displayName": "talabat-mobile-driver",
+  "name": "talabatak-mobile-driver",
+  "displayName": "talabatak-mobile-driver",
   "expo": {
-    "name": "talabat-mobile-driver",
-    "slug": "talabat-mobile-driver",
+    "name": "talabatak-mobile-driver",
+    "slug": "talabatak-mobile-driver",
     "version": "1.0.0",
     "assetBundlePatterns": [
       "**/*"
     ],
     "android": {
-      "package": "com.mm.abdelhay.talabatmobiledriver"
+      "package": "com.mm.abdelhay.talabatakmobiledriver"
+    },
+    "ios": {
+      "bundleIdentifier": "com.talabatak.talabatakmobiledriver",
+      "buildNumber": "1.0.0"
     }
   }
 }
